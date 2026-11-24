@@ -999,33 +999,73 @@
       }
     }
 
-    // Eventos para abrir y cerrar la tarjeta
+    // Eventos para abrir y cerrar la tarjeta 3D
+    coverCard.addEventListener("click", openInvitation);
     openCardBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       openInvitation();
     });
+    closeCardBtn.addEventListener("click", closeInvitation);
 
-    coverCard.addEventListener("click", () => {
-      openInvitation();
-    });
+    if (mapLinkBtn) {
+      mapLinkBtn.addEventListener("click", () => {
+        audioEngine.playButtonHarp();
+      });
+    }
 
-    closeCardBtn.addEventListener("click", () => {
-      closeInvitation();
-    });
-
-    mapLinkBtn.addEventListener("click", () => {
-      audioEngine.playButtonHarp();
-    });
-
+    // Mostrar u ocultar el cupo según la respuesta de asistencia
     attendanceSelect.addEventListener("change", () => {
+      audioEngine.playButtonHarp();
       if (attendanceSelect.value === "No podré asistir") {
-        guestsCountContainer.classList.add("opacity-45");
+        guestsCountContainer.classList.add("opacity-50", "pointer-events-none");
       } else {
-        guestsCountContainer.classList.remove("opacity-45");
+        guestsCountContainer.classList.remove("opacity-50", "pointer-events-none");
       }
     });
 
-    // Envío de confirmación hacia la base de datos en Google Sheets (sin duplicados)
+    // Envío de confirmación hacia la base de datos en Google Sheets (sin duplicados y sin bloqueos CORS)
+    function enviarAGoogleSheetsJSONP(nombre, asistencia) {
+      return new Promise((resolve, reject) => {
+        const callbackName = "rsvpCallback_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+        const script = document.createElement("script");
+        let finalizado = false;
+
+        const limpiar = () => {
+          if (script.parentNode) script.parentNode.removeChild(script);
+          delete window[callbackName];
+        };
+
+        const timeoutId = setTimeout(() => {
+          if (!finalizado) {
+            finalizado = true;
+            limpiar();
+            reject(new Error("Tiempo de espera agotado"));
+          }
+        }, 12000);
+
+        window[callbackName] = (data) => {
+          if (!finalizado) {
+            finalizado = true;
+            clearTimeout(timeoutId);
+            limpiar();
+            resolve(data);
+          }
+        };
+
+        script.onerror = () => {
+          if (!finalizado) {
+            finalizado = true;
+            clearTimeout(timeoutId);
+            limpiar();
+            reject(new Error("Error de red al conectar con Apps Script"));
+          }
+        };
+
+        script.src = `${GOOGLE_SHEETS_URL}?nombre=${encodeURIComponent(nombre)}&asistencia=${encodeURIComponent(asistencia)}&callback=${callbackName}`;
+        document.body.appendChild(script);
+      });
+    }
+
     rsvpForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const nombre = guestNameInput.value.trim();
@@ -1068,31 +1108,13 @@
       confirmBtnLabel.textContent = "Guardando...";
 
       try {
-        const response = await fetch(GOOGLE_SHEETS_URL, {
-          method: "POST",
-          redirect: "follow",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
-          body: JSON.stringify({
-            nombre: nombre,
-            asistencia: asistencia
-          })
-        });
+        const result = await enviarAGoogleSheetsJSONP(nombre, asistencia);
 
-        const rawText = await response.text();
-        let result;
-        try {
-          result = JSON.parse(rawText);
-        } catch (parseErr) {
-          throw new Error("Respuesta no válida de Google Sheets");
-        }
-
-        if (result.status === "duplicate") {
+        if (result && result.status === "duplicate") {
           registradosLocal.push(nombreNormalizado);
           localStorage.setItem("xv_julieta_confirmados", JSON.stringify(registradosLocal));
           showFeedback("¡Hola! Este nombre ya se encuentra registrado en la lista de invitados.", true);
-        } else if (result.status === "ok") {
+        } else if (result && result.status === "ok") {
           registradosLocal.push(nombreNormalizado);
           localStorage.setItem("xv_julieta_confirmados", JSON.stringify(registradosLocal));
 
@@ -1105,7 +1127,7 @@
           showFeedback("No se pudo guardar el registro. Intenta nuevamente.", true);
         }
       } catch (error) {
-        showFeedback("No se pudo conectar desde esta vista previa o falta permiso público en Apps Script.", true);
+        showFeedback("No se pudo conectar con Google Sheets. Verifica que Apps Script esté implementado como 'Nueva versión' y 'Cualquier persona'.", true);
       } finally {
         confirmSubmitBtn.disabled = false;
         confirmSubmitBtn.classList.remove("opacity-70", "pointer-events-none");
