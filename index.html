@@ -1127,7 +1127,22 @@
           showFeedback("No se pudo guardar el registro. Intenta nuevamente.", true);
         }
       } catch (error) {
-        showFeedback("No se pudo conectar con Google Sheets. Verifica que Apps Script esté implementado como 'Nueva versión' y 'Cualquier persona'.", true);
+        // Respaldo infalible para navegadores móviles (WhatsApp / Safari / Samsung Internet)
+        try {
+          const fallbackUrl = `${GOOGLE_SHEETS_URL}?nombre=${encodeURIComponent(nombre)}&asistencia=${encodeURIComponent(asistencia)}`;
+          await fetch(fallbackUrl, { method: "GET", mode: "no-cors" });
+
+          registradosLocal.push(nombreNormalizado);
+          localStorage.setItem("xv_julieta_confirmados", JSON.stringify(registradosLocal));
+
+          audioEngine.playMagicOpenChime();
+          spawnSparkleBurst(window.innerWidth / 2, window.innerHeight * 0.7, 26);
+
+          showFeedback("¡Gracias! Tu asistencia ha sido confirmada y guardada exitosamente.", false);
+          guestNameInput.value = "";
+        } catch (fallbackError) {
+          showFeedback("No se pudo conectar con Google Sheets. Verifica tu conexión a internet.", true);
+        }
       } finally {
         confirmSubmitBtn.disabled = false;
         confirmSubmitBtn.classList.remove("opacity-70", "pointer-events-none");
