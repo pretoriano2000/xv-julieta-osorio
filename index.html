@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Mis XV - Julieta Osorio Oquendo</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts elegantes: Great Vibes (cursiva), Cinzel (títulos reales) y Montserrat (lectura limpia en móvil) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --navy-deep: #040b1a;
+      --navy-royal: #0a1938;
+      --navy-card: #0d2149;
+      --gold-light: #fcf6ba;
+      --gold-mid: #d4af37;
+      --gold-dark: #996515;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100dvh;
+      background: radial-gradient(circle at 50% 25%, #112a5c 0%, #07132c 55%, #030814 100%);
+      font-family: 'Montserrat', sans-serif;
+      color: #f8fafc;
+      overflow-x: hidden;
+    }
+
+    .font-cursive {
+      font-family: 'Great Vibes', cursive;
+    }
+
+    .font-royal {
+      font-family: 'Cinzel', serif;
+    }
+
+    /* Texto con efecto metálico dorado brillante */
+    .gold-text {
+      background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 28%, #b38728 52%, #fbf5b7 78%, #aa771c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
+    }
+
+    /* Botón dorado metálico */
+    .gold-btn {
+      background: linear-gradient(135deg, #b38728 0%, #fcf6ba 45%, #d4af37 65%, #996515 100%);
+      color: #061026;
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.7);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .gold-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Contenedor con perspectiva 3D */
+    .scene-3d {
+      perspective: 1400px;
+      width: 100%;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Tarjeta 3D inclinable en portada */
+    .card-tilt-wrapper {
+      width: 100%;
+      max-width: 420px;
+      transform-style: preserve-3d;
+      transition: transform 0.18s ease-out;
+      will-change: transform;
+    }
+
+    /* Estado de apertura de portada */
+    .cover-card {
+      position: relative;
+      width: 100%;
+      min-height: 580px;
+      border-radius: 26px;
+      background: linear-gradient(155deg, #0e2452 0%, #071430 55%, #040b1c 100%);
+      border: 1.5px solid rgba(212, 175, 55, 0.65);
+      box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(212, 175, 55, 0.18),
+        inset 0 0 24px rgba(212, 175, 55, 0.12);
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease;
+      cursor: pointer;
+    }
+
+    /* Marco ornamental interior de portada */
+    .cover-inner-frame {
+      position: absolute;
+      inset: 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(252, 246, 186, 0.38);
+      pointer-events: none;
+    }
+
+    .cover-inner-frame::after {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      border-radius: 14px;
+      border: 1px dashed rgba(212, 175, 55, 0.3);
+    }
+
+    /* Reflejo dinámico dorado que sigue el dedo o giroscopio */
+    .dynamic-glare {
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 35%), rgba(252, 246, 186, 0.22) 0%, rgba(212, 175, 55, 0.06) 35%, transparent 65%);
+      pointer-events: none;
+      z-index: 2;
+      mix-blend-mode: screen;
+    }
+
+    /* Animación de apertura 3D de la portada */
+    .cover-card.opening {
+      transform: rotateY(-105deg) scale(0.92);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Tarjeta Interior desplegada */
+    .inside-card {
+      width: 100%;
+      max-width: 440px;
+      border-radius: 26px;
+      background: linear-gradient(170deg, #0d2149 0%, #07132c 50%, #040b1a 100%);
+      border: 1.5px solid rgba(212, 175, 55, 0.65);
+      box-shadow:
+        0 25px 55px rgba(0, 0, 0, 0.85),
+        0 0 35px rgba(212, 175, 55, 0.16);
+      position: relative;
+      overflow: hidden;
+      transform-origin: left center;
+      animation: unfoldCard 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes unfoldCard {
+      0% {
+        opacity: 0;
+        transform: perspective(1200px) rotateY(45deg) scale(0.92);
+      }
+      100% {
+        opacity: 1;
+        transform: perspective(1200px) rotateY(0deg) scale(1);
+      }
+    }
+
+    /* Pulso suave en botón de abrir */
+    @keyframes pulseGold {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.55);
+      }
+      50% {
+        box-shadow: 0 0 0 12px rgba(212, 175, 55, 0);
+      }
+    }
+
+    .pulse-ring {
+      animation: pulseGold 2.4s infinite;
+    }
+
+    /* Canvas de destellos dorados en el fondo */
+    #sparklesCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Separador ornamental */
+    .gold-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #d4af37, #fcf6ba, #d4af37, transparent);
+    }
+
+    /* Animación flotante suave para rosas y corazones dorados */
+    @keyframes floatSlow {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg) scale(1);
+      }
+      50% {
+        transform: translateY(-6px) rotate(4deg) scale(1.04);
+      }
+    }
+
+    @keyframes pulseSoftHeart {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.78;
+      }
+      50% {
+        transform: scale(1.16);
+        opacity: 1;
+      }
+    }
+
+    .float-ornament {
+      animation: floatSlow 4.8s ease-in-out infinite;
+    }
+
+    .float-ornament-delay {
+      animation: floatSlow 5.4s ease-in-out 1.4s infinite;
+    }
+
+    .pulse-heart-gold {
+      animation: pulseSoftHeart 2.8s ease-in-out infinite;
+    }
+
+    /* Botón flotante de música clásica */
+    .music-toggle-btn {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 50;
+      background: rgba(7, 19, 44, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(212, 175, 55, 0.65);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.55), 0 0 12px rgba(212, 175, 55, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .music-toggle-btn:active {
+      transform: scale(0.93);
+    }
+
+    /* Barras animadas del ecualizador cuando suena la música */
+    .eq-bar {
+      width: 3px;
+      border-radius: 9999px;
+      background: linear-gradient(to top, #b38728, #fcf6ba);
+      transition: height 0.2s ease;
+    }
+
+    .music-playing .eq-bar:nth-child(1) {
+      animation: eqBounce 0.7s ease-in-out infinite alternate;
+    }
+    .music-playing .eq-bar:nth-child(2) {
+      animation: eqBounce 0.5s ease-in-out 0.15s infinite alternate;
+    }
+    .music-playing .eq-bar:nth-child(3) {
+      animation: eqBounce 0.8s ease-in-out 0.3s infinite alternate;
+    }
+    .music-playing .eq-bar:nth-child(4) {
+      animation: eqBounce 0.6s ease-in-out 0.1s infinite alternate;
+    }
+
+    @keyframes eqBounce {
+      0% { height: 5px; }
+      100% { height: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Botón flotante de control de música clásica -->
+  <button
+    id="musicToggleBtn"
+    type="button"
+    aria-label="Activar o pausar música clásica"
+    class="music-toggle-btn hidden rounded-full px-3.5 py-2 flex items-center gap-2 text-amber-200 text-xs font-medium"
+  >
+    <div id="eqBars" class="flex items-end gap-[2.5px] h-4">
+      <span class="eq-bar h-2"></span>
+      <span class="eq-bar h-3.5"></span>
+      <span class="eq-bar h-2.5"></span>
+      <span class="eq-bar h-3"></span>
+    </div>
+    <span id="musicStatusText" class="font-royal tracking-wider text-[11px] uppercase">Música</span>
+  </button>
+
+  <!-- Canvas de partículas y destellos dorados flotantes -->
+  <canvas id="sparklesCanvas"></canvas>
+
+  <!-- Escena Principal 3D -->
+  <main class="scene-3d" id="sceneContainer">
+
+    <!-- ==================== PORTADA 3D INTERACTIVA ==================== -->
+    <div id="coverWrapper" class="card-tilt-wrapper">
+      <section id="coverCard" class="cover-card flex flex-col items-center justify-between px-6 py-10 text-center select-none" aria-label="Portada de invitación Mis XV Julieta Osorio Oquendo">
+        <div class="dynamic-glare" id="glareEffect"></div>
+        <div class="cover-inner-frame"></div>
+
+        <!-- Rosas y corazones dorados ornamentales en esquinas de portada -->
+        <svg class="float-ornament pointer-events-none absolute top-5 left-5 w-12 h-12 opacity-85 z-10 drop-shadow-[0_2px_6px_rgba(212,175,55,0.45)]" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M32 18C27 18 23 22 23 27C23 32 27 36 32 36C37 36 41 32 41 27C41 22 37 18 32 18ZM32 22C34.8 22 37 24.2 37 27C37 29.8 34.8 32 32 32C29.2 32 27 29.8 27 27C27 24.2 29.2 22 32 22Z" stroke="#FCF6BA" stroke-width="1.4"/>
+          <path d="M21 26C17 28 15 33 18 38C21 43 27 45 32 45C37 45 43 43 46 38C49 33 47 28 43 26" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M25 17C28 13 36 13 39 17" stroke="#FCF6BA" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M16 44C21 44 25 47 27 51C22 51 17 48 16 44Z" fill="#D4AF37" fill-opacity="0.45" stroke="#FCF6BA" stroke-width="1.1"/>
+          <path d="M48 44C43 44 39 47 37 51C42 51 47 48 48 44Z" fill="#D4AF37" fill-opacity="0.45" stroke="#FCF6BA" stroke-width="1.1"/>
+        </svg>
+
+        <svg class="float-ornament-delay pointer-events-none absolute top-5 right-5 w-12 h-12 opacity-85 z-10 drop-shadow-[0_2px_6px_rgba(212,175,55,0.45)]" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M32 18C27 18 23 22 23 27C23 32 27 36 32 36C37 36 41 32 41 27C41 22 37 18 32 18ZM32 22C34.8 22 37 24.2 37 27C37 29.8 34.8 32 32 32C29.2 32 27 29.8 27 27C27 24.2 29.2 22 32 22Z" stroke="#FCF6BA" stroke-width="1.4"/>
+          <path d="M21 26C17 28 15 33 18 38C21 43 27 45 32 45C37 45 43 43 46 38C49 33 47 28 43 26" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M25 17C28 13 36 13 39 17" stroke="#FCF6BA" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M16 44C21 44 25 47 27 51C22 51 17 48 16 44Z" fill="#D4AF37" fill-opacity="0.45" stroke="#FCF6BA" stroke-width="1.1"/>
+          <path d="M48 44C43 44 39 47 37 51C42 51 47 48 48 44Z" fill="#D4AF37" fill-opacity="0.45" stroke="#FCF6BA" stroke-width="1.1"/>
+        </svg>
+
+        <!-- Corazones dorados sutiles en esquinas inferiores de portada -->
+        <svg class="pulse-heart-gold pointer-events-none absolute bottom-6 left-6 w-6 h-6 z-10" viewBox="0 0 24 24" fill="none">
+          <path d="M12 20.5C12 20.5 4 15.2 4 9.2C4 6.6 6 4.5 8.5 4.5C10.1 4.5 11.4 5.3 12 6.5C12.6 5.3 13.9 4.5 15.5 4.5C18 4.5 20 6.6 20 9.2C20 15.2 12 20.5 12 20.5Z" stroke="#FCF6BA" stroke-width="1.4" fill="#D4AF37" fill-opacity="0.28"/>
+        </svg>
+        <svg class="pulse-heart-gold pointer-events-none absolute bottom-6 right-6 w-6 h-6 z-10" style="animation-delay: 1.2s;" viewBox="0 0 24 24" fill="none">
+          <path d="M12 20.5C12 20.5 4 15.2 4 9.2C4 6.6 6 4.5 8.5 4.5C10.1 4.5 11.4 5.3 12 6.5C12.6 5.3 13.9 4.5 15.5 4.5C18 4.5 20 6.6 20 9.2C20 15.2 12 20.5 12 20.5Z" stroke="#FCF6BA" stroke-width="1.4" fill="#D4AF37" fill-opacity="0.28"/>
+        </svg>
+
+        <!-- Corona ornamental superior SVG -->
+        <div class="relative z-10 mt-2 flex flex-col items-center" style="transform: translateZ(28px);">
+          <svg class="w-16 h-16 mb-2 drop-shadow-[0_4px_10px_rgba(212,175,55,0.45)]" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="crownGold" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#BF953F"/>
+                <stop offset="35%" stop-color="#FCF6BA"/>
+                <stop offset="70%" stop-color="#D4AF37"/>
+                <stop offset="100%" stop-color="#996515"/>
+              </linearGradient>
+            </defs>
+            <path d="M8 46L13 21L24 33L32 15L40 33L51 21L56 46H8Z" fill="url(#crownGold)" stroke="#FCF6BA" stroke-width="1.2" stroke-linejoin="round"/>
+            <rect x="10" y="48" width="44" height="5" rx="2.5" fill="url(#crownGold)"/>
+            <circle cx="32" cy="11" r="2.8" fill="#FCF6BA"/>
+            <circle cx="12" cy="17" r="2.2" fill="#FCF6BA"/>
+            <circle cx="52" cy="17" r="2.2" fill="#FCF6BA"/>
+            <circle cx="32" cy="36" r="2.5" fill="#071430"/>
+            <circle cx="21" cy="39" r="1.8" fill="#071430"/>
+            <circle cx="43" cy="39" r="1.8" fill="#071430"/>
+          </svg>
+          <span class="font-royal tracking-[0.35em] text-xs uppercase text-amber-200/85">Invitación Especial</span>
+        </div>
+
+        <!-- Título Central -->
+        <div class="relative z-10 my-4" style="transform: translateZ(42px);">
+          <p class="font-royal text-2xl sm:text-3xl tracking-[0.22em] uppercase gold-text font-semibold mb-2">
+            Mis XV
+          </p>
+          <div class="flex items-center justify-center gap-2 my-3">
+            <div class="gold-divider w-16"></div>
+            <svg class="pulse-heart-gold w-4 h-4 text-amber-300" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <div class="gold-divider w-16"></div>
+          </div>
+          <h1 class="font-cursive text-5xl sm:text-6xl leading-tight gold-text px-1 py-2">
+            Julieta<br/>Osorio Oquendo
+          </h1>
+          <div class="flex items-center justify-center gap-2 my-3">
+            <div class="gold-divider w-16"></div>
+            <svg class="float-ornament w-5 h-5 text-amber-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="11" r="3"/>
+              <path d="M12 5c-3.5 0-6 2.5-6 6 0 4 3 7 6 7s6-3 6-7c0-3.5-2.5-6-6-6z"/>
+              <path d="M7 19c2-1 4-1 5 0 1-1 3-1 5 0"/>
+            </svg>
+            <div class="gold-divider w-16"></div>
+          </div>
+          <p class="text-xs sm:text-sm tracking-[0.2em] uppercase text-blue-100/80 font-light mt-2">
+            11 de Diciembre &bull; 7:00 P.M.
+          </p>
+        </div>
+
+        <!-- Botón / Indicador Táctil para Abrir -->
+        <div class="relative z-10 mb-2 flex flex-col items-center gap-2" style="transform: translateZ(35px);">
+          <button id="openCardBtn" type="button" class="gold-btn pulse-ring font-royal font-semibold text-sm tracking-[0.16em] uppercase px-7 py-3.5 rounded-full flex items-center gap-2.5">
+            <span>Toca para abrir</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 12h14"/>
+            </svg>
+          </button>
+          <span class="text-[11px] text-amber-200/70 tracking-wider">Desliza o inclina tu celular para ver el brillo 3D</span>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== INTERIOR DE LA INVITACIÓN ==================== -->
+    <section id="insideCard" class="inside-card hidden px-5 py-7 sm:px-7 sm:py-9 text-center" aria-label="Detalles de la invitación">
+      <!-- Esquinas ornamentales sutiles -->
+      <div class="pointer-events-none absolute inset-2.5 rounded-[20px] border border-amber-300/25"></div>
+
+      <!-- Rosas doradas flotantes en las esquinas superiores del interior -->
+      <svg class="float-ornament pointer-events-none absolute top-4 left-4 w-10 h-10 opacity-80" viewBox="0 0 64 64" fill="none">
+        <path d="M32 18C27 18 23 22 23 27C23 32 27 36 32 36C37 36 41 32 41 27C41 22 37 18 32 18ZM32 22C34.8 22 37 24.2 37 27C37 29.8 34.8 32 32 32C29.2 32 27 29.8 27 27C27 24.2 29.2 22 32 22Z" stroke="#FCF6BA" stroke-width="1.4"/>
+        <path d="M21 26C17 28 15 33 18 38C21 43 27 45 32 45C37 45 43 43 46 38C49 33 47 28 43 26" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <svg class="float-ornament-delay pointer-events-none absolute top-4 right-4 w-10 h-10 opacity-80" viewBox="0 0 64 64" fill="none">
+        <path d="M32 18C27 18 23 22 23 27C23 32 27 36 32 36C37 36 41 32 41 27C41 22 37 18 32 18ZM32 22C34.8 22 37 24.2 37 27C37 29.8 34.8 32 32 32C29.2 32 27 29.8 27 27C27 24.2 29.2 22 32 22Z" stroke="#FCF6BA" stroke-width="1.4"/>
+        <path d="M21 26C17 28 15 33 18 38C21 43 27 45 32 45C37 45 43 43 46 38C49 33 47 28 43 26" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+
+      <!-- Encabezado Interior -->
+      <div class="relative z-10">
+        <p class="font-royal text-xs tracking-[0.32em] uppercase text-amber-200/80">Mis XV Años</p>
+        <h2 class="font-cursive text-4xl sm:text-5xl gold-text mt-1 mb-2 leading-tight">
+          Julieta Osorio Oquendo
+        </h2>
+        <div class="flex items-center justify-center gap-2.5 my-3">
+          <div class="gold-divider w-20"></div>
+          <svg class="pulse-heart-gold w-4 h-4 text-amber-300" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+          <div class="gold-divider w-20"></div>
+        </div>
+      </div>
+
+      <!-- Mensaje Emotivo -->
+      <div class="relative z-10 my-5 px-2">
+        <p class="text-sm sm:text-base leading-relaxed text-[#f6e29c] font-normal italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.65)]">
+          "Hay momentos inolvidables que se atesoran en el corazón para siempre, y este día marca el inicio de una hermosa etapa en mi vida. Por eso quiero compartir la alegría de mis quince años contigo, porque tu presencia hará que esta noche mágica sea verdaderamente especial."
+        </p>
+      </div>
+
+      <!-- Tarjetas de Información: Fecha/Hora y Recepción -->
+      <div class="relative z-10 grid grid-cols-1 gap-3.5 my-5 text-left">
+
+        <!-- Fecha y Hora -->
+        <div class="rounded-2xl bg-[#091836]/90 border border-amber-400/35 p-4 flex items-center gap-4 shadow-md">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-300/20 to-amber-600/20 border border-amber-300/40 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="18" rx="3"/>
+              <path d="M16 2v4M8 2v4M3 10h18"/>
+            </svg>
+          </div>
+          <div>
+            <p class="font-royal text-xs uppercase tracking-widest text-amber-300">Fecha y Hora</p>
+            <p class="text-base font-semibold text-white mt-0.5">Diciembre 11 &bull; 7:00 p.m.</p>
+            <p class="text-xs text-blue-200/75">Te esperamos puntualmente</p>
+          </div>
+        </div>
+
+        <!-- Recepción -->
+        <div class="rounded-2xl bg-[#091836]/90 border border-amber-400/35 p-4 flex items-center justify-between gap-3 shadow-md">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-300/20 to-amber-600/20 border border-amber-300/40 flex items-center justify-center shrink-0">
+              <svg class="w-6 h-6 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-6-5.33-6-10a6 6 0 1 1 12 0c0 4.67-6 10-6 10z"/>
+                <circle cx="12" cy="11" r="2.2"/>
+              </svg>
+            </div>
+            <div>
+              <p class="font-royal text-xs uppercase tracking-widest text-amber-300">Recepción</p>
+              <p class="text-base font-semibold text-white mt-0.5">Calle 18 #19B – 43</p>
+            </div>
+          </div>
+          <a id="mapLinkBtn" href="https://www.google.com/maps/search/?api=1&query=Calle+18+%2319B-43" target="_blank" rel="noopener noreferrer" class="shrink-0 px-3 py-2 rounded-xl bg-amber-400/15 hover:bg-amber-400/25 border border-amber-300/40 text-amber-200 text-xs font-medium transition">
+            Ver Mapa
+          </a>
+        </div>
+
+        <!-- Código de Vestimenta Destacado -->
+        <div class="rounded-2xl bg-gradient-to-r from-[#0e2554] via-[#13316e] to-[#0e2554] border border-amber-300/55 p-4 text-center shadow-lg">
+          <div class="flex items-center justify-center gap-2 mb-1.5">
+            <span class="inline-block w-3.5 h-3.5 rounded-full bg-blue-600 border border-amber-200 shadow"></span>
+            <p class="font-royal text-xs uppercase tracking-[0.2em] text-amber-200 font-semibold">Código de Vestimenta</p>
+            <span class="inline-block w-3.5 h-3.5 rounded-full bg-amber-400 border border-white shadow"></span>
+          </div>
+          <p class="text-sm font-medium text-white leading-snug">
+            Reservamos el color <span class="text-sky-300 font-semibold">azul</span> y <span class="text-amber-300 font-semibold">dorado</span> en todas sus tonalidades
+          </p>
+          <p class="text-[11px] text-blue-100/80 mt-1">
+            Agradecemos tu cariño al dejar estos tonos exclusivos para la quinceañera.
+          </p>
+        </div>
+
+        <!-- Lluvia de Sobres -->
+        <div class="rounded-2xl bg-[#091836]/90 border border-amber-400/35 p-4 flex items-center gap-4 shadow-md">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-300/20 to-amber-600/20 border border-amber-300/40 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <rect x="2" y="5" width="20" height="14" rx="2.5"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2 7l10 6 10-6"/>
+            </svg>
+          </div>
+          <div>
+            <p class="font-royal text-xs uppercase tracking-widest text-amber-300">Detalle</p>
+            <p class="text-base font-semibold text-white mt-0.5">Lluvia de sobres</p>
+            <p class="text-xs text-blue-200/75">Tu compañía es mi mejor regalo</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gold-divider w-full my-5"></div>
+
+      <!-- ==================== FORMULARIO DE CONFIRMACIÓN A BASE DE DATOS ==================== -->
+      <div class="relative z-10 text-left rounded-2xl bg-[#061128]/95 border border-amber-400/40 p-4 sm:p-5 shadow-inner">
+        <h3 class="font-royal text-center text-sm uppercase tracking-[0.2em] gold-text font-semibold mb-1">
+          Confirma tu Asistencia
+        </h3>
+        <p class="text-center text-xs text-blue-100/80 mb-4">
+          Escribe tus datos y toca el botón <span class="text-amber-300 font-semibold">Confirmar</span> para registrar tu asistencia
+        </p>
+
+        <!-- Mensaje de alerta amigable (en lugar de alert()) -->
+        <div id="formFeedback" class="hidden mb-3 rounded-xl px-3.5 py-2.5 text-xs font-medium text-center"></div>
+
+        <form id="rsvpForm" class="space-y-3.5" novalidate>
+          <div>
+            <label for="guestName" class="block text-xs font-medium text-amber-200/90 mb-1">
+              Nombre completo *
+            </label>
+            <input
+              type="text"
+              id="guestName"
+              name="guestName"
+              placeholder="Ej. María Camila Pérez"
+              required
+              class="w-full rounded-xl bg-[#0c2047] border border-amber-400/35 px-3.5 py-3 text-sm text-white placeholder-blue-300/45 focus:outline-none focus:border-amber-300"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label for="attendanceStatus" class="block text-xs font-medium text-amber-200/90 mb-1">
+                ¿Asistirás?
+              </label>
+              <select
+                id="attendanceStatus"
+                name="attendanceStatus"
+                class="w-full rounded-xl bg-[#0c2047] border border-amber-400/35 px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-300"
+              >
+                <option value="Sí, asistiré">Sí, asistiré</option>
+                <option value="No podré asistir">No podré asistir</option>
+              </select>
+            </div>
+
+            <div id="guestsCountContainer">
+              <span class="block text-xs font-medium text-amber-200/90 mb-1">
+                Cupo asignado
+              </span>
+              <div
+                class="w-full rounded-xl bg-[#0c2047]/80 border border-amber-400/35 px-3 py-3 text-sm text-amber-200 font-medium flex items-center justify-center gap-2"
+              >
+                <svg class="w-4 h-4 text-amber-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                <span>Cupo: 1 persona</span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            id="confirmSubmitBtn"
+            type="submit"
+            class="w-full gold-btn font-royal font-semibold text-sm uppercase tracking-[0.18em] py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 mt-2"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span id="confirmBtnLabel">Confirmar</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Botón para volver a cerrar la tarjeta y ver la portada 3D -->
+      <div class="relative z-10 mt-6">
+        <button
+          id="closeCardBtn"
+          type="button"
+          class="inline-flex items-center gap-2 text-xs text-amber-200/80 hover:text-amber-200 border border-amber-400/30 rounded-full px-4 py-2 transition"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
+          </svg>
+          <span>Cerrar tarjeta y ver portada</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    /**
+     * ============================================================================
+     * CONFIGURACIÓN DE LA BASE DE DATOS EN GOOGLE SHEETS (APPS SCRIPT)
+     * ============================================================================
+     * URL de la Aplicación Web generada en Google Apps Script.
+     */
+    const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyuP3nfz5-QivBBbfd-cf4yCV4hEVVDs39fuqw-pJ8TOuBn7nGr1fRM3bibNGNXga2K/exec";
+
+    // Referencias principales del DOM
+    const coverWrapper = document.getElementById("coverWrapper");
+    const coverCard = document.getElementById("coverCard");
+    const insideCard = document.getElementById("insideCard");
+    const openCardBtn = document.getElementById("openCardBtn");
+    const closeCardBtn = document.getElementById("closeCardBtn");
+    const glareEffect = document.getElementById("glareEffect");
+    const mapLinkBtn = document.getElementById("mapLinkBtn");
+
+    const musicToggleBtn = document.getElementById("musicToggleBtn");
+    const eqBars = document.getElementById("eqBars");
+    const musicStatusText = document.getElementById("musicStatusText");
+
+    const rsvpForm = document.getElementById("rsvpForm");
+    const guestNameInput = document.getElementById("guestName");
+    const attendanceSelect = document.getElementById("attendanceStatus");
+    const guestsCountContainer = document.getElementById("guestsCountContainer");
+    const formFeedback = document.getElementById("formFeedback");
+    const confirmSubmitBtn = document.getElementById("confirmSubmitBtn");
+    const confirmBtnLabel = document.getElementById("confirmBtnLabel");
+
+    let isCardOpen = false;
+
+    /**
+     * ============================================================================
+     * MOTOR DE MÚSICA CLÁSICA ("EL LAGO DE LOS CISNES") Y EFECTOS SONOROS
+     * ============================================================================
+     * Funciona 100% sin archivos externos para evitar bloqueos en móviles iOS/Android.
+     */
+    class ClassicalAudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.masterGain = null;
+        this.reverbNode = null;
+        this.isPlaying = false;
+        this.schedulerTimer = null;
+        this.stepIndex = 0;
+
+        // Melodía principal de "El Lago de los Cisnes" (Escena / Tema del Cisne - Tchaikovsky)
+        // En La menor (Am), tempo lento, expresivo y majestuoso (~0.42s por corchea)
+        this.tempoSeconds = 0.42;
+        this.swanLakeSequence = [
+          // Compás 1: E5 largo con acompañamiento de arpa en Am (A2 - E3 - A3 - C4)
+          { melody: 659.25, melDur: 1.65, bass: 110.00, harp: 220.00 }, // E5 | A2 + A3
+          { melody: null,   melDur: 0,    bass: null,   harp: 329.63 }, // E4
+          { melody: null,   melDur: 0,    bass: null,   harp: 523.25 }, // C5
+          { melody: null,   melDur: 0,    bass: null,   harp: 329.63 }, // E4
+
+          // Compás 2: A4 - B4 - C5 - D5 (ascenso clásico del cisne)
+          { melody: 440.00, melDur: 0.46, bass: 110.00, harp: 220.00 }, // A4
+          { melody: 493.88, melDur: 0.46, bass: null,   harp: 329.63 }, // B4
+          { melody: 523.25, melDur: 0.46, bass: null,   harp: 440.00 }, // C5
+          { melody: 587.33, melDur: 0.46, bass: null,   harp: 329.63 }, // D5
+
+          // Compás 3: E5 (largo) - C5 - E5
+          { melody: 659.25, melDur: 1.25, bass: 110.00, harp: 220.00 }, // E5
+          { melody: null,   melDur: 0,    bass: null,   harp: 329.63 },
+          { melody: 523.25, melDur: 0.48, bass: null,   harp: 440.00 }, // C5
+          { melody: 659.25, melDur: 0.52, bass: null,   harp: 329.63 }, // E5
+
+          // Compás 4: C5 (largo) - E5 - C5
+          { melody: 523.25, melDur: 1.25, bass: 87.31,  harp: 220.00 }, // C5 | F2
+          { melody: null,   melDur: 0,    bass: null,   harp: 349.23 }, // F4
+          { melody: 659.25, melDur: 0.48, bass: null,   harp: 440.00 }, // E5
+          { melody: 523.25, melDur: 0.52, bass: null,   harp: 349.23 }, // C5
+
+          // Compás 5: A4 (largo) - C5 - A4 - F4
+          { melody: 440.00, melDur: 1.20, bass: 87.31,  harp: 220.00 }, // A4 | F2
+          { melody: null,   melDur: 0,    bass: null,   harp: 349.23 },
+          { melody: 523.25, melDur: 0.46, bass: null,   harp: 440.00 }, // C5
+          { melody: 349.23, melDur: 0.52, bass: null,   harp: 261.63 }, // F4
+
+          // Compás 6: D5 - B4 - G#4 - E4 (cadencia dramática en Mi Mayor E7)
+          { melody: 587.33, melDur: 0.50, bass: 82.41,  harp: 246.94 }, // D5 | E2
+          { melody: 493.88, melDur: 0.50, bass: null,   harp: 329.63 }, // B4
+          { melody: 415.30, melDur: 0.50, bass: null,   harp: 493.88 }, // G#4
+          { melody: 329.63, melDur: 0.65, bass: null,   harp: 329.63 }, // E4
+
+          // Compás 7-8: Resolución dulce en La menor (A4 sostenido con arpegio)
+          { melody: 440.00, melDur: 2.30, bass: 110.00, harp: 220.00 }, // A4
+          { melody: null,   melDur: 0,    bass: null,   harp: 329.63 },
+          { melody: null,   melDur: 0,    bass: null,   harp: 440.00 },
+          { melody: null,   melDur: 0,    bass: null,   harp: 523.25 },
+          { melody: null,   melDur: 0,    bass: null,   harp: 440.00 },
+          { melody: null,   melDur: 0,    bass: null,   harp: 329.63 }
+        ];
+      }
+
+      initContext() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+
+          this.masterGain = this.ctx.createGain();
+          this.masterGain.gain.value = 0.28;
+
+          // Reverberación suave tipo teatro / sala de conciertos
+          this.reverbNode = this.createSoftReverb(2.5);
+          const reverbGain = this.ctx.createGain();
+          reverbGain.gain.value = 0.4;
+
+          this.reverbNode.connect(reverbGain);
+          reverbGain.connect(this.masterGain);
+          this.masterGain.connect(this.ctx.destination);
+        }
+        if (this.ctx.state === "suspended") {
+          this.ctx.resume();
+        }
+      }
+
+      // Crea un impulso de reverberación suave para darle calidez sinfónica a la música
+      createSoftReverb(durationSeconds = 2.5) {
+        const rate = this.ctx.sampleRate;
+        const length = Math.floor(rate * durationSeconds);
+        const impulse = this.ctx.createBuffer(2, length, rate);
+        for (let channel = 0; channel < 2; channel++) {
+          const data = impulse.getChannelData(channel);
+          for (let i = 0; i < length; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2.6);
+          }
+        }
+        const convolver = this.ctx.createConvolver();
+        convolver.buffer = impulse;
+        return convolver;
+      }
+
+      // Toca una nota cálida tipo arpa / oboe-cuerdas expresivas
+      playClassicNote(freq, startTime, duration, volume = 0.14, instrumentType = "harp") {
+        if (!this.ctx || !freq) return;
+
+        const oscMain = this.ctx.createOscillator();
+        const oscHarmonic = this.ctx.createOscillator();
+        const noteGain = this.ctx.createGain();
+
+        if (instrumentType === "melody") {
+          // Timbre expresivo tipo oboe / cuerdas líricas de El Lago de los Cisnes
+          oscMain.type = "triangle";
+          oscHarmonic.type = "sine";
+          oscMain.frequency.setValueAtTime(freq, startTime);
+          oscHarmonic.frequency.setValueAtTime(freq * 2, startTime);
+
+          const harmGain = this.ctx.createGain();
+          harmGain.gain.value = 0.28;
+
+          noteGain.gain.setValueAtTime(0.0001, startTime);
+          noteGain.gain.linearRampToValueAtTime(volume, startTime + 0.08);
+          noteGain.gain.setValueAtTime(volume * 0.9, startTime + duration * 0.65);
+          noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration + 0.12);
+
+          oscMain.connect(noteGain);
+          oscHarmonic.connect(harmGain);
+          harmGain.connect(noteGain);
+        } else {
+          // Arpa clásica o bajo profundo
+          oscMain.type = instrumentType === "bass" ? "sine" : "triangle";
+          oscHarmonic.type = "sine";
+          oscMain.frequency.setValueAtTime(freq, startTime);
+          oscHarmonic.frequency.setValueAtTime(freq * 2, startTime);
+
+          const harmGain = this.ctx.createGain();
+          harmGain.gain.value = instrumentType === "bass" ? 0.1 : 0.18;
+
+          noteGain.gain.setValueAtTime(0.0001, startTime);
+          noteGain.gain.linearRampToValueAtTime(volume, startTime + 0.025);
+          noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+          oscMain.connect(noteGain);
+          oscHarmonic.connect(harmGain);
+          harmGain.connect(noteGain);
+        }
+
+        noteGain.connect(this.masterGain);
+        if (this.reverbNode) {
+          noteGain.connect(this.reverbNode);
+        }
+
+        oscMain.start(startTime);
+        oscHarmonic.start(startTime);
+        oscMain.stop(startTime + duration + 0.15);
+        oscHarmonic.stop(startTime + duration + 0.15);
+      }
+
+      // Efecto de sonido mágico al abrir la invitación (cascada brillante dorada)
+      playMagicOpenChime() {
+        this.initContext();
+        const now = this.ctx.currentTime;
+        const sparkleNotes = [440.0, 523.25, 659.25, 880.0, 1046.5, 1318.51, 1760.0];
+        sparkleNotes.forEach((freq, idx) => {
+          this.playClassicNote(freq, now + idx * 0.065, 1.35, 0.12, "harp");
+        });
+      }
+
+      // Efecto de sonido suave de arpa al tocar botones
+      playButtonHarp() {
+        this.initContext();
+        const now = this.ctx.currentTime;
+        [659.25, 880.0].forEach((freq, idx) => {
+          this.playClassicNote(freq, now + idx * 0.05, 0.55, 0.09, "harp");
+        });
+      }
+
+      startWaltz() {
+        this.initContext();
+        if (this.isPlaying) return;
+        this.isPlaying = true;
+        this.updateUI();
+
+        const playStep = () => {
+          if (!this.isPlaying) return;
+          const now = this.ctx.currentTime;
+          const step = this.swanLakeSequence[this.stepIndex % this.swanLakeSequence.length];
+
+          if (step.bass) {
+            this.playClassicNote(step.bass, now, this.tempoSeconds * 4.2, 0.15, "bass");
+          }
+          if (step.harp) {
+            this.playClassicNote(step.harp, now, this.tempoSeconds * 2.1, 0.065, "harp");
+          }
+          if (step.melody) {
+            this.playClassicNote(step.melody, now, step.melDur, 0.155, "melody");
+          }
+
+          this.stepIndex++;
+          this.schedulerTimer = setTimeout(playStep, this.tempoSeconds * 1000);
+        };
+
+        playStep();
+      }
+
+      stopWaltz() {
+        this.isPlaying = false;
+        if (this.schedulerTimer) {
+          clearTimeout(this.schedulerTimer);
+          this.schedulerTimer = null;
+        }
+        this.updateUI();
+      }
+
+      toggleWaltz() {
+        if (this.isPlaying) {
+          this.stopWaltz();
+        } else {
+          this.startWaltz();
+        }
+      }
+
+      updateUI() {
+        musicToggleBtn.classList.remove("hidden");
+        if (this.isPlaying) {
+          eqBars.classList.add("music-playing");
+          musicStatusText.textContent = "Música ON";
+        } else {
+          eqBars.classList.remove("music-playing");
+          musicStatusText.textContent = "Silencio";
+        }
+      }
+    }
+
+    const audioEngine = new ClassicalAudioEngine();
+
+    // Control flotante para pausar/reanudar la música clásica
+    musicToggleBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      audioEngine.toggleWaltz();
+    });
+
+    /**
+     * Función para aplicar inclinación 3D y mover el brillo dorado dinámico
+     */
+    function apply3DTilt(rotateX, rotateY) {
+      if (isCardOpen) return;
+      const clampedX = Math.max(-14, Math.min(14, rotateX));
+      const clampedY = Math.max(-14, Math.min(14, rotateY));
+      coverWrapper.style.transform = `rotateX(${clampedX}deg) rotateY(${clampedY}deg)`;
+
+      const glareX = 50 + (clampedY / 14) * 35;
+      const glareY = 35 - (clampedX / 14) * 30;
+      glareEffect.style.setProperty("--glare-x", `${glareX}%`);
+      glareEffect.style.setProperty("--glare-y", `${glareY}%`);
+    }
+
+    // Interacción 3D por movimiento del dedo (táctil en celular)
+    coverCard.addEventListener("touchmove", (e) => {
+      if (isCardOpen || !e.touches[0]) return;
+      const rect = coverCard.getBoundingClientRect();
+      const touch = e.touches[0];
+      const relX = (touch.clientX - rect.left) / rect.width - 0.5;
+      const relY = (touch.clientY - rect.top) / rect.height - 0.5;
+      apply3DTilt(-relY * 24, relX * 24);
+    }, { passive: true });
+
+    coverCard.addEventListener("touchend", () => {
+      if (!isCardOpen) apply3DTilt(0, 0);
+    });
+
+    // Interacción 3D por cursor en escritorio
+    coverCard.addEventListener("mousemove", (e) => {
+      if (isCardOpen) return;
+      const rect = coverCard.getBoundingClientRect();
+      const relX = (e.clientX - rect.left) / rect.width - 0.5;
+      const relY = (e.clientY - rect.top) / rect.height - 0.5;
+      apply3DTilt(-relY * 22, relX * 22);
+    });
+
+    coverCard.addEventListener("mouseleave", () => {
+      if (!isCardOpen) apply3DTilt(0, 0);
+    });
+
+    // Interacción 3D por giroscopio / orientación del celular
+    function handleDeviceOrientation(event) {
+      if (isCardOpen || event.beta === null || event.gamma === null) return;
+      const tiltX = (event.beta - 45) * 0.35;
+      const tiltY = event.gamma * 0.45;
+      apply3DTilt(-tiltX, tiltY);
+    }
+
+    function requestMotionPermissionIfNeeded() {
+      if (
+        typeof DeviceOrientationEvent !== "undefined" &&
+        typeof DeviceOrientationEvent.requestPermission === "function"
+      ) {
+        DeviceOrientationEvent.requestPermission()
+          .then((state) => {
+            if (state === "granted") {
+              window.addEventListener("deviceorientation", handleDeviceOrientation);
+            }
+          })
+          .catch(() => {});
+      }
+    }
+
+    if (typeof window !== "undefined" && "DeviceOrientationEvent" in window) {
+      window.addEventListener("deviceorientation", handleDeviceOrientation);
+    }
+
+    /**
+     * Abre la tarjeta con animación 3D fluida, efectos mágicos y música clásica
+     */
+    function openInvitation() {
+      if (isCardOpen) return;
+      requestMotionPermissionIfNeeded();
+      isCardOpen = true;
+
+      // Reproducir efecto de campanillas mágicas e iniciar el vals clásico
+      audioEngine.playMagicOpenChime();
+      setTimeout(() => {
+        audioEngine.startWaltz();
+      }, 380);
+
+      // Ráfaga de destellos dorados en el centro de la pantalla
+      spawnSparkleBurst(window.innerWidth / 2, window.innerHeight / 2, 34);
+
+      coverWrapper.style.transform = "rotateX(0deg) rotateY(0deg)";
+      coverCard.classList.add("opening");
+
+      setTimeout(() => {
+        coverWrapper.classList.add("hidden");
+        insideCard.classList.remove("hidden");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 650);
+    }
+
+    /**
+     * Cierra la tarjeta y regresa a la portada 3D
+     */
+    function closeInvitation() {
+      if (!isCardOpen) return;
+      isCardOpen = false;
+      audioEngine.playButtonHarp();
+
+      insideCard.classList.add("hidden");
+      coverWrapper.classList.remove("hidden");
+      coverCard.classList.remove("opening");
+      apply3DTilt(0, 0);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /**
+     * Muestra mensajes elegantes dentro del formulario sin usar alert()
+     */
+    function showFeedback(message, isError = false) {
+      formFeedback.textContent = message;
+      formFeedback.classList.remove(
+        "hidden",
+        "bg-red-950/80",
+        "border-red-400/50",
+        "text-red-200",
+        "bg-emerald-950/80",
+        "border-amber-300/60",
+        "text-amber-100"
+      );
+
+      if (isError) {
+        formFeedback.classList.add("bg-red-950/80", "border", "border-red-400/50", "text-red-200");
+      } else {
+        formFeedback.classList.add("bg-emerald-950/80", "border", "border-amber-300/60", "text-amber-100");
+      }
+    }
+
+    // Eventos para abrir y cerrar la tarjeta
+    openCardBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openInvitation();
+    });
+
+    coverCard.addEventListener("click", () => {
+      openInvitation();
+    });
+
+    closeCardBtn.addEventListener("click", () => {
+      closeInvitation();
+    });
+
+    mapLinkBtn.addEventListener("click", () => {
+      audioEngine.playButtonHarp();
+    });
+
+    attendanceSelect.addEventListener("change", () => {
+      if (attendanceSelect.value === "No podré asistir") {
+        guestsCountContainer.classList.add("opacity-45");
+      } else {
+        guestsCountContainer.classList.remove("opacity-45");
+      }
+    });
+
+    // Envío de confirmación hacia la base de datos en Google Sheets (sin duplicados)
+    rsvpForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const nombre = guestNameInput.value.trim();
+
+      if (!nombre) {
+        showFeedback("Por favor escribe tu nombre completo antes de tocar Confirmar.", true);
+        guestNameInput.focus();
+        return;
+      }
+
+      if (nombre.split(/\s+/).length < 2) {
+        showFeedback("Por favor escribe tu nombre y apellido para evitar registros repetidos.", true);
+        guestNameInput.focus();
+        return;
+      }
+
+      const asistencia = attendanceSelect.value;
+      const nombreNormalizado = nombre
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      // Verificación inmediata en el navegador si ya confirmó desde este celular
+      const registradosLocal = JSON.parse(localStorage.getItem("xv_julieta_confirmados") || "[]");
+      if (registradosLocal.includes(nombreNormalizado)) {
+        showFeedback("¡Hola! Ya tenemos registrada tu confirmación anteriormente.", true);
+        return;
+      }
+
+      if (!GOOGLE_SHEETS_URL || GOOGLE_SHEETS_URL.includes("PEGA_AQUI")) {
+        showFeedback("Falta pegar el enlace de Google Apps Script en el código.", true);
+        return;
+      }
+
+      // Estado de carga en el botón
+      confirmSubmitBtn.disabled = true;
+      confirmSubmitBtn.classList.add("opacity-70", "pointer-events-none");
+      confirmBtnLabel.textContent = "Guardando...";
+
+      try {
+        const response = await fetch(GOOGLE_SHEETS_URL, {
+          method: "POST",
+          redirect: "follow",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify({
+            nombre: nombre,
+            asistencia: asistencia
+          })
+        });
+
+        const rawText = await response.text();
+        let result;
+        try {
+          result = JSON.parse(rawText);
+        } catch (parseErr) {
+          throw new Error("Respuesta no válida de Google Sheets");
+        }
+
+        if (result.status === "duplicate") {
+          registradosLocal.push(nombreNormalizado);
+          localStorage.setItem("xv_julieta_confirmados", JSON.stringify(registradosLocal));
+          showFeedback("¡Hola! Este nombre ya se encuentra registrado en la lista de invitados.", true);
+        } else if (result.status === "ok") {
+          registradosLocal.push(nombreNormalizado);
+          localStorage.setItem("xv_julieta_confirmados", JSON.stringify(registradosLocal));
+
+          audioEngine.playMagicOpenChime();
+          spawnSparkleBurst(window.innerWidth / 2, window.innerHeight * 0.7, 26);
+
+          showFeedback("¡Gracias! Tu asistencia ha sido confirmada y guardada exitosamente.", false);
+          guestNameInput.value = "";
+        } else {
+          showFeedback("No se pudo guardar el registro. Intenta nuevamente.", true);
+        }
+      } catch (error) {
+        showFeedback("No se pudo conectar desde esta vista previa o falta permiso público en Apps Script.", true);
+      } finally {
+        confirmSubmitBtn.disabled = false;
+        confirmSubmitBtn.classList.remove("opacity-70", "pointer-events-none");
+        confirmBtnLabel.textContent = "Confirmar";
+      }
+    });
+
+    /**
+     * ============================================================================
+     * ANIMACIÓN DE PARTÍCULAS Y DESTELLOS DORADOS FLOTANDO EN EL FONDO + RÁFAGAS
+     * ============================================================================
+     */
+    const canvas = document.getElementById("sparklesCanvas");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    let burstParticles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function initParticles() {
+      particles = [];
+      const count = Math.min(60, Math.floor((window.innerWidth * window.innerHeight) / 13000));
+      const shapes = ["sparkle", "sparkle", "heart", "rose", "star"];
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 2.4 + 0.8,
+          speedY: -(Math.random() * 0.35 + 0.12),
+          speedX: (Math.random() - 0.5) * 0.28,
+          alpha: Math.random() * 0.72 + 0.2,
+          alphaChange: (Math.random() * 0.015 + 0.005) * (Math.random() < 0.5 ? 1 : -1),
+          shape: shapes[i % shapes.length],
+          rotation: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() - 0.5) * 0.015,
+          swayPhase: Math.random() * Math.PI * 2
+        });
+      }
+    }
+
+    // Dibuja un corazón dorado delicado en el canvas
+    function drawGoldenHeart(ctx, x, y, size, alpha, rotation) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      ctx.scale(size / 10, size / 10);
+      ctx.beginPath();
+      ctx.moveTo(0, 3);
+      ctx.bezierCurveTo(0, 0, -5, -2, -5, 2);
+      ctx.bezierCurveTo(-5, 5.5, 0, 8, 0, 10);
+      ctx.bezierCurveTo(0, 8, 5, 5.5, 5, 2);
+      ctx.bezierCurveTo(5, -2, 0, 0, 0, 3);
+      ctx.fillStyle = `rgba(252, 246, 186, ${alpha * 0.45})`;
+      ctx.strokeStyle = `rgba(212, 175, 55, ${alpha * 0.85})`;
+      ctx.lineWidth = 1.1;
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Dibuja una rosa dorada minimalista y clásica en el canvas
+    function drawGoldenRose(ctx, x, y, size, alpha, rotation) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      ctx.strokeStyle = `rgba(252, 246, 186, ${alpha * 0.8})`;
+      ctx.fillStyle = `rgba(212, 175, 55, ${alpha * 0.28})`;
+      ctx.lineWidth = 1;
+
+      // Pétalos exteriores en espiral clásica
+      for (let p = 0; p < 5; p++) {
+        ctx.save();
+        ctx.rotate((p * Math.PI * 2) / 5);
+        ctx.beginPath();
+        ctx.arc(0, -size * 0.45, size * 0.55, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      }
+      // Centro de la rosa
+      ctx.beginPath();
+      ctx.arc(0, 0, size * 0.35, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Dibuja un destello en forma de estrella de 4 puntas dorada
+    function drawGoldenStar(ctx, x, y, size, alpha, rotation) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      ctx.beginPath();
+      const spikes = 4;
+      for (let i = 0; i < spikes * 2; i++) {
+        const r = i % 2 === 0 ? size * 2.1 : size * 0.55;
+        const a = (i * Math.PI) / spikes;
+        if (i === 0) ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+        else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+      }
+      ctx.closePath();
+      ctx.fillStyle = `rgba(252, 246, 186, ${alpha * 0.85})`;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    /**
+     * Crea una explosión sutil de destellos dorados al abrir o tocar la pantalla
+     */
+    function spawnSparkleBurst(originX, originY, amount = 18) {
+      for (let i = 0; i < amount; i++) {
+        const angle = (Math.PI * 2 * i) / amount + (Math.random() - 0.5) * 0.4;
+        const velocity = Math.random() * 3.8 + 1.4;
+        burstParticles.push({
+          x: originX,
+          y: originY,
+          vx: Math.cos(angle) * velocity,
+          vy: Math.sin(angle) * velocity,
+          radius: Math.random() * 2.6 + 1.1,
+          life: 1.0,
+          decay: Math.random() * 0.022 + 0.014,
+          isHeart: i % 4 === 0
+        });
+      }
+    }
+
+    // Destellos mágicos sutiles al tocar cualquier parte de la pantalla
+    document.addEventListener("pointerdown", (e) => {
+      spawnSparkleBurst(e.clientX, e.clientY, 10);
+    });
+
+    function animateSparkles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (const p of particles) {
+        p.swayPhase += 0.02;
+        p.x += p.speedX + Math.sin(p.swayPhase) * 0.18;
+        p.y += p.speedY;
+        p.rotation += p.rotSpeed;
+        p.alpha += p.alphaChange;
+
+        if (p.alpha <= 0.15 || p.alpha >= 0.92) {
+          p.alphaChange *= -1;
+        }
+
+        if (p.y < -18) {
+          p.y = canvas.height + 18;
+          p.x = Math.random() * canvas.width;
+        }
+        if (p.x < -18) p.x = canvas.width + 18;
+        if (p.x > canvas.width + 18) p.x = -18;
+
+        if (p.shape === "heart") {
+          drawGoldenHeart(ctx, p.x, p.y, p.radius * 3.4, p.alpha, p.rotation * 0.4);
+        } else if (p.shape === "rose") {
+          drawGoldenRose(ctx, p.x, p.y, p.radius * 2.8, p.alpha * 0.85, p.rotation);
+        } else if (p.shape === "star") {
+          drawGoldenStar(ctx, p.x, p.y, p.radius * 1.6, p.alpha, p.rotation);
+        } else {
+          ctx.beginPath();
+          const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 2.5);
+          gradient.addColorStop(0, `rgba(252, 246, 186, ${p.alpha})`);
+          gradient.addColorStop(0.5, `rgba(212, 175, 55, ${p.alpha * 0.6})`);
+          gradient.addColorStop(1, "rgba(212, 175, 55, 0)");
+          ctx.fillStyle = gradient;
+          ctx.arc(p.x, p.y, p.radius * 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // Dibujar ráfagas interactivas de estrellas y corazones dorados
+      for (let i = burstParticles.length - 1; i >= 0; i--) {
+        const bp = burstParticles[i];
+        bp.x += bp.vx;
+        bp.y += bp.vy;
+        bp.vx *= 0.96;
+        bp.vy *= 0.96;
+        bp.life -= bp.decay;
+
+        if (bp.life <= 0) {
+          burstParticles.splice(i, 1);
+          continue;
+        }
+
+        if (bp.isHeart) {
+          drawGoldenHeart(ctx, bp.x, bp.y, bp.radius * 3.2, bp.life, 0);
+        } else {
+          ctx.beginPath();
+          const g = ctx.createRadialGradient(bp.x, bp.y, 0, bp.x, bp.y, bp.radius * 3);
+          g.addColorStop(0, `rgba(255, 252, 220, ${bp.life})`);
+          g.addColorStop(0.45, `rgba(212, 175, 55, ${bp.life * 0.8})`);
+          g.addColorStop(1, "rgba(212, 175, 55, 0)");
+          ctx.fillStyle = g;
+          ctx.arc(bp.x, bp.y, bp.radius * 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      requestAnimationFrame(animateSparkles);
+    }
+
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+      initParticles();
+    });
+
+    window.onload = function () {
+      resizeCanvas();
+      initParticles();
+      animateSparkles();
+    };
+  </script>
+</body>
+</html>
